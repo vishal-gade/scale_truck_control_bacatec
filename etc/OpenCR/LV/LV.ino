@@ -4,9 +4,9 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float32.h>
-#include <sensor_msgs/Imu.h>
+// #include <sensor_msgs/Imu.h>
 #include <SD.h>
-#include <IMU.h>
+// #include <IMU.h>
 #include <lrc2ocr.h>
 #include <ocr2lrc.h>
 
@@ -37,7 +37,7 @@
 
 #define DATA_LOG      (0)
 
-cIMU  IMU;
+// cIMU  IMU;
 Servo throttle_;
 Servo steer_;
 int Index_;
@@ -83,7 +83,7 @@ float Kf_ = 1.0;  // feed forward const.
 float dt_ = 0.1;
 float circ_ = WHEEL_DIM * M_PI;
 scale_truck_control::ocr2lrc pub_msg_;
-sensor_msgs::Imu imu_msg_;
+// sensor_msgs::Imu imu_msg_;
 float setSPEED(float tar_vel, float cur_vel) { 
   static float output, err, prev_err, P_err, I_err;
   static float prev_u_k, prev_u, A_err;
@@ -146,18 +146,18 @@ float setSPEED(float tar_vel, float cur_vel) {
 void setANGLE() {
   static float output;
   float angle = tx_steer_;
-  if(IMU.update() > 0) {
-    imu_msg_.orientation.x = IMU.quat[0];
-    imu_msg_.orientation.y = IMU.quat[1];
-    imu_msg_.orientation.z = IMU.quat[2];
-    imu_msg_.orientation.w = IMU.quat[3];
-    imu_msg_.angular_velocity.x = IMU.angle[0];
-    imu_msg_.angular_velocity.y = IMU.angle[1];
-    imu_msg_.angular_velocity.z = IMU.angle[2];
-    imu_msg_.linear_acceleration.x = IMU.rpy[0];
-    imu_msg_.linear_acceleration.y = IMU.rpy[1];
-    imu_msg_.linear_acceleration.z = IMU.rpy[2];
-  }
+  // if(IMU.update() > 0) {
+  //   imu_msg_.orientation.x = IMU.quat[0];
+  //   imu_msg_.orientation.y = IMU.quat[1];
+  //   imu_msg_.orientation.z = IMU.quat[2];
+  //   imu_msg_.orientation.w = IMU.quat[3];
+  //   imu_msg_.angular_velocity.x = IMU.angle[0];
+  //   imu_msg_.angular_velocity.y = IMU.angle[1];
+  //   imu_msg_.angular_velocity.z = IMU.angle[2];
+  //   imu_msg_.linear_acceleration.x = IMU.rpy[0];
+  //   imu_msg_.linear_acceleration.y = IMU.rpy[1];
+  //   imu_msg_.linear_acceleration.z = IMU.rpy[2];
+  // }
   output = (angle * 12.0) + (float)STEER_CENTER;
   if(output > MAX_STEER)
     output = MAX_STEER;
@@ -210,55 +210,55 @@ void CheckEN() {
   if(cur_vel < 0)
     cur_vel = 0;
   output_vel = setSPEED(target_vel, cur_vel);
-  output_angle = IMU.rpy[2];
-  if(DATA_LOG)
-  {
-    Serial.print(target_vel);
-    Serial.print(" m/s | ");
-    Serial.print(cur_vel);
-    Serial.print(" m/s | ");
-    Serial.print(output_vel);
-    Serial.println(" signal | ");
-    Serial.print(EN_pos_);
-    Serial.print(" count | ");
-    Serial.print(cumCountT_);
-    Serial.print(" count | ");
-    Serial.print(output_vel);
-    Serial.print(" us | ");
-    Serial.print(target_ANGLE);
-    Serial.print(" deg | ");
-    Serial.print(output_angle);
-    Serial.println(" deg");
-  }
-  logfile_ = SD.open(filename_, FILE_WRITE);
-  logfile_.print(target_vel);
-  logfile_.print(",");
-  logfile_.print(cur_vel);
-  logfile_.print(",");
-  logfile_.print(pred_vel_);
-  logfile_.print(",");
-  logfile_.print(Alpha_);
-  logfile_.print(",");
-  logfile_.print(EN_pos_);
-  logfile_.print(",");
-  logfile_.print(cumCountT_);
-  logfile_.print(",");
-  logfile_.print(output_vel);
-  logfile_.print(",");
-  logfile_.print(Kp_);
-  logfile_.print(",");
-  logfile_.print(Ki_);
-  logfile_.print(",");
-  logfile_.print(tx_dist_);
-  logfile_.print(",");
-  logfile_.print(target_ANGLE);
-  logfile_.print(",");
-  logfile_.print(IMU.rpy[0]);
-  logfile_.print(",");
-  logfile_.print(IMU.rpy[1]);
-  logfile_.print(",");
-  logfile_.println(IMU.rpy[2]);
-  logfile_.close();
+  // output_angle = IMU.rpy[2];
+  // if(DATA_LOG)
+  // {
+  //   Serial.print(target_vel);
+  //   Serial.print(" m/s | ");
+  //   Serial.print(cur_vel);
+  //   Serial.print(" m/s | ");
+  //   Serial.print(output_vel);
+  //   Serial.println(" signal | ");
+  //   Serial.print(EN_pos_);
+  //   Serial.print(" count | ");
+  //   Serial.print(cumCountT_);
+  //   Serial.print(" count | ");
+  //   Serial.print(output_vel);
+  //   Serial.print(" us | ");
+  //   Serial.print(target_ANGLE);
+  //   Serial.print(" deg | ");
+  //   Serial.print(output_angle);
+  //   Serial.println(" deg");
+  // }
+  // logfile_ = SD.open(filename_, FILE_WRITE);
+  // logfile_.print(target_vel);
+  // logfile_.print(",");
+  // logfile_.print(cur_vel);
+  // logfile_.print(",");
+  // logfile_.print(pred_vel_);
+  // logfile_.print(",");
+  // logfile_.print(Alpha_);
+  // logfile_.print(",");
+  // logfile_.print(EN_pos_);
+  // logfile_.print(",");
+  // logfile_.print(cumCountT_);
+  // logfile_.print(",");
+  // logfile_.print(output_vel);
+  // logfile_.print(",");
+  // logfile_.print(Kp_);
+  // logfile_.print(",");
+  // logfile_.print(Ki_);
+  // logfile_.print(",");
+  // logfile_.print(tx_dist_);
+  // logfile_.print(",");
+  // logfile_.print(target_ANGLE);
+  // logfile_.print(",");
+  // logfile_.print(IMU.rpy[0]);
+  // logfile_.print(",");
+  // logfile_.print(IMU.rpy[1]);
+  // logfile_.print(",");
+  // logfile_.println(IMU.rpy[2]);
+  // logfile_.close();
   // CLEAR counter
   ClearT();
 }
@@ -287,7 +287,7 @@ void setup() {
   pinMode(EN_PINA, INPUT);
   pinMode(EN_PINB, INPUT);
   attachInterrupt(0, getENA, CHANGE);
-  IMU.begin();
+  // IMU.begin();
   Serial.begin(BAUD_RATE);
   if(!SD.begin(10)){
     Serial.println("Card failed, or not present");
