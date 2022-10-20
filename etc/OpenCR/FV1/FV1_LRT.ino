@@ -4,9 +4,9 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Float32.h>
-#include <sensor_msgs/Imu.h>
+// #include <sensor_msgs/Imu.h>
 #include <SD.h>
-#include <IMU.h>
+// #include <IMU.h>
 #include <ctl.h>
 #include <vel.h>
 
@@ -37,7 +37,7 @@
 
 #define DATA_LOG      (0)
 
-cIMU  IMU;
+// cIMU  IMU;
 Servo throttle_;
 Servo steer_;
 int Index_;
@@ -88,7 +88,7 @@ float tmp_ = 0.0;
 float epsilon_ = 0.5;
 scale_truck_control::vel vel_msg_;
 scale_truck_control::lrc lrc_msg_;
-sensor_msgs::Imu imu_msg_;
+// sensor_msgs::Imu imu_msg_;
 float setSPEED(float tar_vel, float cur_vel) { 
   static float output, err, prev_err, P_err, I_err, D_err;
   static float prev_u_k, prev_u, A_err;
@@ -162,18 +162,18 @@ float setSPEED(float tar_vel, float cur_vel) {
 void setANGLE() {
   static float output;
   float angle = tx_steer_;
-  if(IMU.update() > 0) {
-    imu_msg_.orientation.x = IMU.quat[0];
-    imu_msg_.orientation.y = IMU.quat[1];
-    imu_msg_.orientation.z = IMU.quat[2];
-    imu_msg_.orientation.w = IMU.quat[3];
-    imu_msg_.angular_velocity.x = IMU.angle[0];
-    imu_msg_.angular_velocity.y = IMU.angle[1];
-    imu_msg_.angular_velocity.z = IMU.angle[2];
-    imu_msg_.linear_acceleration.x = IMU.rpy[0];
-    imu_msg_.linear_acceleration.y = IMU.rpy[1];
-    imu_msg_.linear_acceleration.z = IMU.rpy[2];
-  }
+  // if(IMU.update() > 0) {
+  //   imu_msg_.orientation.x = IMU.quat[0];
+  //   imu_msg_.orientation.y = IMU.quat[1];
+  //   imu_msg_.orientation.z = IMU.quat[2];
+  //   imu_msg_.orientation.w = IMU.quat[3];
+  //   imu_msg_.angular_velocity.x = IMU.angle[0];
+  //   imu_msg_.angular_velocity.y = IMU.angle[1];
+  //   imu_msg_.angular_velocity.z = IMU.angle[2];
+  //   imu_msg_.linear_acceleration.x = IMU.rpy[0];
+  //   imu_msg_.linear_acceleration.y = IMU.rpy[1];
+  //   imu_msg_.linear_acceleration.z = IMU.rpy[2];
+  // }
   output = (angle * 12.0) + (float)STEER_CENTER;
   if(output > MAX_STEER)
     output = MAX_STEER;
@@ -223,53 +223,53 @@ void CheckEN() {
   else
      cur_vel = (float)EN_pos_ / TICK2CYCLE * ( SEC_TIME / ((float)cumCountT_*T_TIME)) * circ_; // m/s
   output_vel = setSPEED(target_vel, cur_vel);
-  output_angle = IMU.rpy[2];
-  if(DATA_LOG)
-  {
-    Serial.print(target_vel);
-    Serial.print(" m/s | ");
-    Serial.print(cur_vel);
-    Serial.print(" m/s | ");
-    Serial.print(output_vel);
-    Serial.println(" signal | ");
-    Serial.print(EN_pos_);
-    Serial.print(" count | ");
-    Serial.print(cumCountT_);
-    Serial.print(" count | ");
-    Serial.print(output_vel);
-    Serial.print(" us | ");
-    Serial.print(target_ANGLE);
-    Serial.print(" deg | ");
-    Serial.print(output_angle);
-    Serial.println(" deg");
-  }
-  logfile_ = SD.open(filename_, FILE_WRITE);
-  logfile_.print(target_vel);
-  logfile_.print(",");
-  logfile_.print(cur_vel);
-  logfile_.print(",");
-  logfile_.print(EN_pos_);
-  logfile_.print(",");
-  logfile_.print(cumCountT_);
-  logfile_.print(",");
-  logfile_.print(output_vel);
-  logfile_.print(",");
-  logfile_.print(Kp_);
-  logfile_.print(",");
-  logfile_.print(Ki_);
-  logfile_.print(",");
-  logfile_.print(Kd_);
-  logfile_.print(",");
-  logfile_.print(tx_dist_);
-  logfile_.print(",");
-  logfile_.print(target_ANGLE);
-  logfile_.print(",");
-  logfile_.print(IMU.rpy[0]);
-  logfile_.print(",");
-  logfile_.print(IMU.rpy[1]);
-  logfile_.print(",");
-  logfile_.println(IMU.rpy[2]);
-  logfile_.close();
+  // output_angle = IMU.rpy[2];
+  // if(DATA_LOG)
+  // {
+  //   Serial.print(target_vel);
+  //   Serial.print(" m/s | ");
+  //   Serial.print(cur_vel);
+  //   Serial.print(" m/s | ");
+  //   Serial.print(output_vel);
+  //   Serial.println(" signal | ");
+  //   Serial.print(EN_pos_);
+  //   Serial.print(" count | ");
+  //   Serial.print(cumCountT_);
+  //   Serial.print(" count | ");
+  //   Serial.print(output_vel);
+  //   Serial.print(" us | ");
+  //   Serial.print(target_ANGLE);
+  //   Serial.print(" deg | ");
+  //   Serial.print(output_angle);
+  //   Serial.println(" deg");
+  // }
+  // logfile_ = SD.open(filename_, FILE_WRITE);
+  // logfile_.print(target_vel);
+  // logfile_.print(",");
+  // logfile_.print(cur_vel);
+  // logfile_.print(",");
+  // logfile_.print(EN_pos_);
+  // logfile_.print(",");
+  // logfile_.print(cumCountT_);
+  // logfile_.print(",");
+  // logfile_.print(output_vel);
+  // logfile_.print(",");
+  // logfile_.print(Kp_);
+  // logfile_.print(",");
+  // logfile_.print(Ki_);
+  // logfile_.print(",");
+  // logfile_.print(Kd_);
+  // logfile_.print(",");
+  // logfile_.print(tx_dist_);
+  // logfile_.print(",");
+  // logfile_.print(target_ANGLE);
+  // logfile_.print(",");
+  // logfile_.print(IMU.rpy[0]);
+  // logfile_.print(",");
+  // logfile_.print(IMU.rpy[1]);
+  // logfile_.print(",");
+  // logfile_.println(IMU.rpy[2]);
+  // logfile_.close();
   // CLEAR counter
   ClearT();
 }
@@ -287,7 +287,7 @@ ros::NodeHandle nh_;
 ros::Subscriber<scale_truck_control::ctl> rosSubMsg("/ctl_msg", &rosCtlCallback);
 ros::Subscriber<scale_truck_control::lrc> rosSubLrc("/lrc_msg", &rosLrcCallback);
 ros::Publisher rosPubVel("/vel_msg", &vel_msg_);
-ros::Publisher rosPubImu("/imu_msg", &imu_msg_);
+// ros::Publisher rosPubImu("/imu_msg", &imu_msg_);
 ros::Publisher rosPubLrc("/lrc_msg", &lrc_msg_);
 /*
    Arduino setup()
@@ -297,31 +297,31 @@ void setup() {
   nh_.subscribe(rosSubMsg);
   nh_.subscribe(rosSubLrc);
   nh_.advertise(rosPubVel);
-  nh_.advertise(rosPubImu);
+  // nh_.advertise(rosPubImu);
   nh_.advertise(rosPubLrc);
   throttle_.attach(THROTTLE_PIN);
   steer_.attach(STEER_PIN);
   pinMode(EN_PINA, INPUT);
   pinMode(EN_PINB, INPUT);
   attachInterrupt(0, getENA, CHANGE);
-  IMU.begin();
+  // IMU.begin();
   Serial.begin(BAUD_RATE);
-  if(!SD.begin(10)){
-    Serial.println("Card failed, or not present");
-  } else {
-    Serial.println("card initialized.");
-    for(uint8_t i=0; i<100; i++){
-      filename_[4] = i/10 + '0';
-      filename_[5] = i%10 + '0';
-      if(! SD.exists(filename_)){
-        logfile_ = SD.open(filename_, FILE_WRITE);
-        break;
-      }
-    }
-    Serial.print("Logging to: ");
-    Serial.print(filename_);
-    logfile_.close();
-  }
+  // if(!SD.begin(10)){
+  //   Serial.println("Card failed, or not present");
+  // } else {
+  //   Serial.println("card initialized.");
+  //   for(uint8_t i=0; i<100; i++){
+  //     filename_[4] = i/10 + '0';
+  //     filename_[5] = i%10 + '0';
+  //     if(! SD.exists(filename_)){
+  //       logfile_ = SD.open(filename_, FILE_WRITE);
+  //       break;
+  //     }
+  //   }
+  //   Serial.print("Logging to: ");
+  //   Serial.print(filename_);
+  //   logfile_.close();
+  // }
   Timer1.stop();
   Timer1.setPeriod(T_TIME);
   Timer1.attachInterrupt(CountT);
@@ -371,7 +371,7 @@ void loop() {
   currentTime = millis();
   if ((currentTime - prevTime) >= (ANGLE_TIME / 1000)) {
     rosPubVel.publish(&vel_msg_);
-    rosPubImu.publish(&imu_msg_);
+    // rosPubImu.publish(&imu_msg_);
 	rosPubLrc.publish(&lrc_msg_);
     prevTime = currentTime;
   }
