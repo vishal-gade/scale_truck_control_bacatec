@@ -7,9 +7,9 @@
 // #include <sensor_msgs/Imu.h>
 #include <SD.h>
 // #include <IMU.h>
-#include <lrc2ocr.h>
-#include <ocr2lrc.h>
-
+#include "lrc2ocr.h"
+#include "ocr2lrc.h"
+#include "SAMDTimerInterrupt.h"
 // Period
 #define BAUD_RATE     (57600)
 #define CYCLE_TIME    (100000) // us
@@ -52,12 +52,12 @@ float output_;
 volatile int EN_pos_;
 volatile int CountT_;
 volatile int cumCountT_;
-char filename_[] = "LV1_00.TXT";
-File logfile_;
+// char filename_[] = "LV1_00.TXT";
+// File logfile_;
 
-HardwareTimer Timer1(TIMER_CH1); // T Method
-HardwareTimer Timer2(TIMER_CH2); // Check EN
-HardwareTimer Timer3(TIMER_CH3); // Angle
+SAMDTimer Timer1(TIMER_TC3); // T Method
+SAMDTimer Timer2(TIMER_TC3); // Check EN
+SAMDTimer Timer3(TIMER_TC3); // Angle
 
 /*
    ros Subscribe Callback Function
@@ -289,34 +289,31 @@ void setup() {
   attachInterrupt(0, getENA, CHANGE);
   // IMU.begin();
   Serial.begin(BAUD_RATE);
-  if(!SD.begin(10)){
-    Serial.println("Card failed, or not present");
-  } else {
-    Serial.println("card initialized.");
-    for(uint8_t i=0; i<100; i++){
-      filename_[4] = i/10 + '0';
-      filename_[5] = i%10 + '0';
-      if(! SD.exists(filename_)){
-        logfile_ = SD.open(filename_, FILE_WRITE);
-        break;
-      }
-    }
-    Serial.print("Logging to: ");
-    Serial.print(filename_);
-    logfile_.close();
-  }
-  Timer1.stop();
-  Timer1.setPeriod(T_TIME);
-  Timer1.attachInterrupt(CountT);
-  Timer1.start();
-  Timer2.stop();
-  Timer2.setPeriod(CYCLE_TIME);
-  Timer2.attachInterrupt(CheckEN);
-  Timer2.start();
-  Timer3.stop();
-  Timer3.setPeriod(ANGLE_TIME);
-  Timer3.attachInterrupt(setANGLE);
-  Timer3.start();
+  // if(!SD.begin(10)){
+  //   Serial.println("Card failed, or not present");
+  // } else {
+  //   Serial.println("card initialized.");
+  //   for(uint8_t i=0; i<100; i++){
+  //     filename_[4] = i/10 + '0';
+  //     filename_[5] = i%10 + '0';
+  //     if(! SD.exists(filename_)){
+  //       logfile_ = SD.open(filename_, FILE_WRITE);
+  //       break;
+  //     }
+  //   }
+  //   Serial.print("Logging to: ");
+  //   Serial.print(filename_);
+  //   logfile_.close();
+  // }
+  Timer1.disableTimer();
+  Timer1.attachInterrupt(1/T_TIME,CountT);
+  Timer1.enableTimer();
+  Timer2.disableTimer();
+  Timer2.attachInterrupt(1/CYCLE_TIME,CheckEN);
+  Timer2.enableTimer();
+  Timer3.disableTimer();
+  Timer3.attachInterrupt(1/ANGLE_TIME, setANGLE);
+  Timer3.enableTimer();
   Serial.print("[OpenCR] setup()");
   tx_throttle_ = 0.0;
   tx_steer_ = 0.0;
